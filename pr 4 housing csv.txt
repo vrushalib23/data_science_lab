@@ -1,0 +1,36 @@
+import pandas as pd 
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error , mean_absolute_error
+
+
+df = pd.read_csv('housing.csv')
+df
+df.columns
+x = df[['RM', 'LSTAT', 'PTRATIO']]
+y = df[['MEDV']]
+x_train , x_test , y_train , y_test = train_test_split(x , y , test_size = 0.25 , random_state = 0)
+
+x_train.shape()
+y_train.shape()
+
+model = LinearRegression()
+
+model.fit(x_train , y_train)
+y_pred = model.predict(x_test)
+y_pred
+
+model.score(x_train , y_train)
+model.score(x_test , y_test)
+
+np.sqrt(mean_squared_error(y_test , y_pred))
+y_test - y_pred
+
+mean_absolute_error(y_test , y_pred)
+
+from sklearn.metrics import r2_score
+r2_score(y_test , y_pred)
+
+new = [[0.7258, 0, 8.64, 0, 0.538, 5.727, 69.6, 3.7965, 4, 307, 22, 391.95, 11.28]]
+model.predict(new)
