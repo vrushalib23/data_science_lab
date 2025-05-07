@@ -1,0 +1,497 @@
+practical no 1 
+
+import pandas as pd 
+df= pd.read_csv('data.csv')
+df
+df.dtypes
+df.describe()
+df.groupby('Age').size()
+df.isna()
+df.isna().sum()
+type("Age")
+type("BMI")
+df.sort_values('Age', ascending = False)
+df.rename(columns = {'Age' : 'year old'})
+# df.drop(column =['Age'])
+df.drop_duplicates()
+df.head()
+df.tail()
+df.count()
+df['Age'] = pd.to_numeric(df['Age'])
+df['Age']
+# to convert categorical data into numerical in pandas
+pd.get_dummies(df['Classification'])
+--------------------------------------------------------------------------------------
+
+
+
+practical no 2 
+
+import pandas as pd 
+import matplotlib.pyplot as plt
+df = pd.read_csv('student data.csv')
+df.shape
+df.describe()
+df.head()
+df.info()
+df.isnull()
+df['Class'].fillna(df['Class'].mode()) 
+df.isnull().sum()
+df.fillna(0)
+df.fillna(method ='backfill')
+df.fillna(method ='pad')
+
+df.dropna(axis = 0 , inplace = True)
+df
+df.dropna(axis = 0, how ='all')
+df
+
+# We use method = 'bfill’ for taking values from the next row
+df['Age'].fillna(method='bfill', inplace=True) 
+print(df['Age'])
+
+#method = 'pad’ for taking values from the previous row 
+df['Class'].fillna(method='pad', inplace=True)
+print(df['Class'].head(10))
+
+
+plt.boxplot(x=df['Age'])
+plt.boxplot(x=df['Class'])
+
+
+
+
+-------------
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+X= np.array([2,4,6,8,10,12])
+np.mean(X)
+np.median(X)
+
+X= np.array([2,4,6,8,10,12])
+df= pd.DataFrame(X)
+print (df)
+
+plt.boxplot(X)
+df.plot.box()
+
+
+data = {
+    "Name": ["Amit", "Priya", "Raj", "Sneha", "Vikram", "Ananya", "Rohan"],
+    "Gender": ["Male", "Female", "Male", "Female", "Male", "Female", "Male"],
+    "Marks": [85, 80, 78, np.nan, 76, 82, np.nan],
+    "Age": [np.nan,21,22,np.nan,24,np.nan,26]
+}
+df = pd.DataFrame(data)
+print(df)
+
+df.head()
+df.tail()
+df.count()
+df.isnull()
+
+df.isnull().sum()
+df.dropna()
+df.fillna(0)
+
+df['Marks'].fillna(df['Marks'].mean())
+df['Age'].fillna(df['Age'].median())
+
+df.fillna(method='bfill')
+df.fillna(method='pad')
+
+
+
+
+
+Q1 = df['Age'].quantile(0.25)
+Q3 = df['Age'].quantile(0.75)
+IQR = Q3 - Q1
+lower = Q1 - 1.5 * IQR
+upper = Q3 + 1.5 * IQR
+outliers = df[(df['Age'] < lower) | (df['Age'] > upper)]
+df = df[(df['Age'] >= lower) & (df['Age'] <= upper)]
+df
+
+
+x = df[['Age' , 'Marks']]
+from sklearn.preprocessing import MinMaxScaler 
+scaler = MinMaxScaler() 
+x_scaled = scaler.fit_transform(x)
+pd.DataFrame(x_scaled).describe() 
+
+
+
+from sklearn.preprocessing import StandardScaler 
+scaler = StandardScaler() 
+x_scaled = scaler.fit_transform(x) 
+pd.DataFrame(x_scaled).describe() 
+
+
+--------------------------------------------------------------------------------------
+
+
+
+practical no 4 
+
+Aim linear regression
+
+
+import pandas as pd 
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error , mean_absolute_error
+
+
+df = pd.read_csv('housing.csv')
+df
+df.columns
+x = df[['RM', 'LSTAT', 'PTRATIO']]
+y = df[['MEDV']]
+x_train , x_test , y_train , y_test = train_test_split(x , y , test_size = 0.25 , random_state = 0)
+
+model = LinearRegression()
+
+model.fit(x_train , y_train)
+y_pred = model.predict(x_test)
+y_pred
+
+model.score(x_train , y_train)
+model.score(x_test , y_test)
+
+np.sqrt(mean_squared_error(y_test , y_pred))
+y_test - y_pred
+
+mean_absolute_error(y_test , y_pred)
+------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
+
+Practical no 3 
+
+1) Provide summery statistics for a dataset with numeric varibles grouped by one
+ of the qualitative variables.
+ 2) write a python program to display some basic statistical details like percentile,
+ mean, standard devivation , etc.--------------------------------------------
+
+
+import pandas as pd 
+df= pd.read_csv('student.csv')
+df
+
+df.pop('Name')
+df
+
+df.pop('Class')
+df
+
+df.min()
+df.max()
+df.median()
+df.std()
+df.mean()
+
+df['Marks'].mean()
+df['Marks'].std()
+df['Marks'].max()
+
+
+grp1 = df.groupby('Marks')
+top = grp1.get_group(90)
+top
+grp1.groups
+
+import seaborn as sns
+df = sns.load_dataset('iris') 
+df
+df.describe()
+
+gr = df.groupby('species')
+se = gr.get_group('setosa')
+se
+
+se.shape
+se.describe()
+
+------------------------------------------------------------------------------------------
+
+practical no  5 
+
+ import pandas as pd 
+ df = pd.read_csv('Social_Network_Ads.csv') 
+ df
+    
+#input data 
+x=df[['Age','EstimatedSalary']] 
+ 
+#output data 
+y=df['Purchased'] 
+
+
+from sklearn.preprocessing import MinMaxScaler 
+scaler = MinMaxScaler() 
+x_scaled = scaler.fit_transform(x) 
+
+from sklearn.model_selection import train_test_split
+
+x_train, x_test, y_train, y_test = train_test_split(x_scaled,y,random_state=0,test_size = 0.25)
+
+    
+x_train 
+y_train 
+
+from sklearn.linear_model import LogisticRegression 
+
+ #creat the object 
+classifier = LogisticRegression()
+classifier.fit(x_train,y_train)
+y_pred = classifier.predict(x_test) 
+y_train.shape 
+x_train.shape 
+y_pred 
+y_test
+
+from sklearn.metrics import confusion_matrix 
+confusion_matrix(y_test,y_pred) 
+y_test.value_counts() 
+
+from sklearn.metrics import classification_report 
+print(classification_report(y_test,y_pred)) 
+
+from sklearn.metrics import ConfusionMatrixDisplay
+
+ConfusionMatrixDisplay.from_estimator(classifier, x_test, y_test)
+--------------------------------------------------------------------------------------
+
+
+
+practical no 6 
+
+
+import pandas as pd
+df = pd.read_csv('iris.csv')
+df.shape
+ #input data 
+x=df.drop('species',axis=1) 
+ 
+#output data 
+y=df['species'] 
+
+y.value_counts() 
+from sklearn.model_selection import train_test_split 
+x_train ,x_test,y_train,y_test=train_test_split(x,y,random_state=0,test_size=0.25)     
+x_train.shape  
+x_test.shape 
+ #import the class 
+from sklearn.naive_bayes import GaussianNB 
+#create the object 
+clf= GaussianNB() 
+ #train the algorithm 
+clf.fit(x_train,y_train) 
+
+y_pred=clf.predict(x_test) 
+
+y_pred
+
+
+from sklearn.metrics import confusion_matrix 
+from sklearn.metrics import classification_report 
+from sklearn.metrics import accuracy_score 
+# from sklearn.metrics import plot_confusion_matrix 
+
+from sklearn.metrics import ConfusionMatrixDisplay
+
+ConfusionMatrixDisplay.from_estimator(clf, x_test, y_test)
+
+confusion_matrix(y_test,y_pred) 
+
+# plot_confusion_matrix(clf,x_test,y_test) 
+accuracy_score(y_test,y_pred) 
+clf.predict_proba(x_test) 
+
+newl=[[4.5,2.9,3.1,0.4]] 
+clf.predict(newl)[0]
+
+newl=[[5.5,3.1,1.0,0.8]] 
+clf.predict(newl)[0] 
+
+newl=[[6.5,3.3,4.9,1.8]] 
+clf.predict(newl)[0] 
+
+print(classification_report(y_test,y_pred))
+--------------------------------------------------------------------------------------
+
+practical 7 
+
+# ! pip install nltk -U
+# ! pip install bs4 -U
+
+import nltk
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
+
+import nltk
+para='Rajgad is a hill fort situated in the pune district'
+print(para)
+
+para.split()
+from nltk.tokenize import sent_tokenize
+from nltk.tokenize import word_tokenize
+
+import nltk
+nltk.download('punkt')
+nltk.download('punkt_tab')
+sent=sent_tokenize(para)
+sent[0]
+words = word_tokenize(para)
+words
+
+from nltk.corpus import stopwords
+swords=stopwords.words('english')
+swords
+
+x=[word for word in words if word not in swords]
+x
+
+from nltk.stem import PorterStemmer
+ps=PorterStemmer() 
+ps.stem('working')
+
+y=[ps.stem(word) for word in x]
+
+y
+from nltk.stem import WordNetLemmatizer
+
+wnl=WordNetLemmatizer()
+
+nltk.download('omw-1.4')
+wnl.lemmatize('working',pos='v')
+print(ps.stem('went'))
+print(wnl.lemmatize('went',pos='v'))
+
+z=[wnl.lemmatize(word,pos='v') for word in x]
+z
+
+
+import string
+string.punctuation
+
+t=[word for word in words if word not in string.punctuation]
+t
+
+from nltk import pos_tag
+import nltk
+nltk.download('averaged_perceptron_tagger_eng')
+
+pos_tag(t)
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+tfidf=TfidfVectorizer()
+
+v=tfidf.fit_transform(t)
+v.shape
+
+import pandas as pd
+pd.DataFrame(v)
+
+
+----
+
+--------------------------------------------------------------------------------------
+
+
+
+
+practical no 8
+Aim
+ Use the inbuilt dataset “titanic” the dataset contains 891 rows and contains
+ informationabout the passengers who boarded the unfortunate titanic ship use
+ the seaborn liabrary to see if we can find any patterns in the data. 
+
+
+import seaborn as sns 
+df= sns.load_dataset('titanic') 
+df
+ df=df[['survived','class','sex','age','fare']] 
+df
+
+ sns.jointplot(x='age',y='fare',data=df) 
+ sns.jointplot(x='age',y='fare',data=df,hue='survived')
+ sns.jointplot(x='age',y='fare',data=df,hue='class')
+
+sns.pairplot(df,hue='sex') 
+ sns.countplot(x=df['sex'])
+sns.countplot(x=df['class']) 
+sns.barplot(x='sex',y='survived',data=df) 
+sns.barplot(x='sex',y='survived',hue='class',data=df)
+
+
+sns.histplot(df['fare']) 
+sns.kdeplot(df['fare']) 
+
+------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
+
+practical 9 
+
+Aim: Use the inbuilt dataset ‘Titanic’ as used in previous experiment . Plot a box
+ plot for distribution of age with respect to each gender along with the information
+ anout wheather they survived or not.(Cloumn name ‘sex’ and ‘age’)
+
+import seaborn as sns 
+df = sns.load_dataset('titanic')
+df
+df = df[['sex','age','survived']]
+df
+sns.boxplot(x='sex',y='age',data=df) 
+sns.boxplot(x='sex',y='age',hue='survived',data = df)
+
+
+
+------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
+
+practical no 10 
+Download the iris flower dataset or any other dataset intoa dataframe. Scan the
+ dataset and given the interference as
+ 1) List down the feature and types
+ 2) Create histogram for each feature in the dataset
+ 3) Create a boxplot for each seature in the dataset
+ 4) Compare distributions and identify outliers.
+
+import seaborn as sns
+df =sns.load_dataset('iris') 
+df
+df.columns 
+df.info() 
+df.dtypes 
+sns.pairplot(df) 
+sns.pairplot(df,hue='species') 
+ sns.pairplot(df,hue='species',diag_kind='hist')
+
+ sns.histplot(df['sepal_length'],kde=True) 
+sns.histplot(df['sepal_width'],kde=True)  
+sns.histplot(df['petal_length'],kde=True) 
+ sns.histplot(df['petal_width'],kde=True) 
+
+ sns.kdeplot(df['petal_width']) 
+sns.kdeplot(df['sepal_width'])
+
+
+ sns.boxplot(x=df['sepal_length']); 
+sns.boxplot(x=df['sepal_width']); 
+sns.boxplot(x=df['petal_length']); 
+sns.boxplot(x=df['petal_width']); 
+
+
+ 
+
+
+
+
+
